@@ -1,0 +1,24 @@
+{
+  "name": "pomum",
+  "version": "1.0.0",
+  "description": "Pomum é um jogo online educacional em canvas, onde múltiplos clientes se conectam a uma arena compartilhada para coletar frutas. Cada entidade é representada por um pixel, e vence quem acumular mais frutas até o fim da partida.",
+  "homepage": "https://github.com/alan-mendes-ufca/Pomum#readme",
+  "bugs": {
+    "url": "https://github.com/alan-mendes-ufca/Pomum/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alan-mendes-ufca/Pomum.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "socket.io": "^4.8.3"
+  }
+}

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pomum</title>
+    <style>
+      #screen {
+        border: 10px solid gray;
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+        image-rendering: -moz-crisp-edges;
+        width: 400px;
+        height: 400px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="screen" width="10" height="10"></canvas>
+
+    <script type="module">
+      import renderScreen from "./models/renderScreen.js";
+      import createKeyboardLitener from "./models/keyboardListener.js";
+      import createGame from "./models/createGame.js";
+
+      const playerObject = {
+        playerId: "player-0",
+        xPosition: 0,
+        yPosition: 0,
+      };
+      const game = createGame();
+      game.addPlayer(playerObject);
+
+      const keyboardListener = createKeyboardLitener(document);
+      keyboardListener.registerPlayerId(playerObject.playerId);
+      keyboardListener.subscribe(game.movePlayer);
+
+      renderScreen(game, playerObject.playerId);
+    </script>
+  </body>
+</html>
