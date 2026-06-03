@@ -12,7 +12,7 @@ export default function createKeyboardLitener(document) {
     state.observers.push(observerFunction);
   }
 
-  function remove(observerFunction) {
+  function unsubscribe(observerFunction) {
     state.observers = state.observers.filter((obs) => obs !== observerFunction);
   }
 
@@ -38,6 +38,7 @@ export default function createKeyboardLitener(document) {
 
   return {
     subscribe,
+    unsubscribe,
     registerPlayerId,
   };
 }
