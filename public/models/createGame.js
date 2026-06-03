@@ -3,12 +3,29 @@ export default function createGame() {
     players: {},
     fruits: {},
     screen: {
-      height: 10,
-      width: 10,
+      height: 0,
+      width: 0,
     },
   };
 
+  const observers = [];
+
+  function subscribe(observerFunction) {
+    observers.push(observerFunction);
+  }
+
+  function unsubscribe(observerFunction) {
+    observers = observers.filter((obs) => obs !== observerFunction);
+  }
+
+  function notifyAll(command) {
+    for (const observerFunction of observers) {
+      observerFunction(command);
+    }
+  }
+
   function movePlayer(command) {
+    notifyAll(command);
     console.log(
       `game.movePlayer() -> Moving ${command.playerId} with ${command.keyPressed}`,
     );
@@ -66,27 +83,53 @@ export default function createGame() {
       x: xPosition,
       y: yPosition,
     };
+
+    notifyAll({
+      type: "add-player",
+      playerId,
+      xPosition,
+      yPosition,
+    });
   }
 
   function removePlayer(command) {
     const playerId = command.playerId;
     delete state.players[playerId];
+
+    notifyAll({
+      type: "remove-player",
+      playerId,
+    });
   }
 
   function addFruit(command) {
-    const fruitId = command.fruitId;
-    const xPosition = command.xPosition;
-    const yPosition = command.yPosition;
+    const fruitId = command?.fruitId ?? crypto.randomUUID();
+    const xPosition =
+      command?.xPosition ?? Math.floor(Math.random() * state.screen.width);
+    const yPosition =
+      command?.yPosition ?? Math.floor(Math.random() * state.screen.height);
 
     state.fruits[fruitId] = {
       x: xPosition,
       y: yPosition,
     };
+
+    notifyAll({
+      type: "add-fruit",
+      fruitId,
+      xPosition,
+      yPosition,
+    });
   }
 
   function removeFruit(command) {
     const fruitId = command.fruitId;
     delete state.fruits[fruitId];
+
+    notifyAll({
+      type: "remove-fruit",
+      fruitId,
+    });
   }
 
   function checkForFruitCollision(playerId) {
@@ -104,8 +147,18 @@ export default function createGame() {
     }
   }
 
+  function start() {
+    const frequency = 5000;
+    setInterval(addFruit, frequency);
+  }
+
   function setState(newState) {
     Object.assign(state, newState);
+  }
+
+  function setScreenValues(widthValue, heightValue) {
+    state.screen.width = widthValue;
+    state.screen.height = heightValue;
   }
 
   return {
@@ -113,8 +166,12 @@ export default function createGame() {
     movePlayer,
     addPlayer,
     removePlayer,
+    start,
     addFruit,
     removeFruit,
     setState,
+    setScreenValues,
+    subscribe,
+    unsubscribe,
   };
 }
