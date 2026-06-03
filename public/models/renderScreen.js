@@ -4,7 +4,7 @@ const context = screen.getContext("2d");
 export default function renderScreen(gameObject, currentPlayerId) {
   context.clearRect(0, 0, screen.width, screen.height);
 
-  context.fillStyle = "gray";
+  context.fillStyle = "black";
   for (let playerId in gameObject.state.players) {
     if (playerId != currentPlayerId) {
       const player = gameObject.state.players[playerId];
